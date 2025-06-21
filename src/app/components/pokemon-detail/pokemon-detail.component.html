@@ -1,0 +1,48 @@
+<div *ngIf="pokemonDetails$ | async as pokemon" class="pokemon-card horizontal-layout">
+
+  <!-- Colonne gauche : image -->
+  <div class="pokemon-image-section">
+    <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + pokemon.id + '.png'"
+         [alt]="pokemon.name"
+         class="pokemon-image" />
+  </div>
+
+  <!-- Colonne droite : infos -->
+  <div class="pokemon-info-section">
+
+    <h2 class="pokemon-name">{{ pokemon.name }}</h2>
+
+    <!-- TYPES EN BADGES -->
+    <div class="pokemon-types">
+      <span *ngFor="let t of pokemon.types" class="type-badge">
+        {{ t.type.name }}
+      </span>
+    </div>
+
+    <!-- METADATA + STATS DANS UN CADRE -->
+    <div class="pokemon-data-box">
+      <div class="meta">
+        <p><strong>Height:</strong> {{ pokemon.height / 10 }} m</p>
+        <p><strong>Weight:</strong> {{ pokemon.weight / 10 }} kg</p>
+      </div>
+
+      <div class="abilities">
+        <h3>Abilities</h3>
+        <ul>
+          <li *ngFor="let a of pokemon.abilities">{{ a.ability.name }}</li>
+        </ul>
+      </div>
+
+      <div class="stats">
+        <h3>Base Stats</h3>
+        <ul>
+          <li *ngFor="let s of pokemon.stats">
+            <span class="stat-name">{{ s.stat.name }}</span>
+            <span class="stat-value">{{ s.base_stat }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>

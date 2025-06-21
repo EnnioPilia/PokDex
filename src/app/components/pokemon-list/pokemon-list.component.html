@@ -1,0 +1,67 @@
+<section class="search-section">
+  <h1 class="main-title">Pokédex</h1>
+
+  <div class="search-wrapper">
+    <div class="search-box">
+      <label for="search-input" class="search-label">Nom</label>
+      <div class="search-field">
+        <input
+          id="search-input"
+          type="text"
+          (input)="onSearch($event)"
+          placeholder="Rechercher un Pokémon..."
+        />
+      </div>
+    </div>
+    <div class="search-info-box">
+      Recherchez un Pokémon par son nom.
+    </div>
+  </div>
+</section>
+
+<section class="filters-section">
+  <div class="filters-inner">
+    <div class="filter-group">
+      <label for="sort-select">Filter by :</label>
+      <select id="sort-select" (change)="onSort($event)">
+        <option value="asc">A → Z</option>
+        <option value="desc">Z → A</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="type-select">Type :</label>
+      <select id="type-select" (change)="onTypeChange($event)">
+        <option value="">All</option>
+        <option *ngFor="let type of availableTypes" [value]="type">
+          {{ type }}
+        </option>
+      </select>
+    </div>
+  </div>
+</section>
+
+<div class="pokedex-panel">
+  <ul class="pokemon-grid" *ngIf="filteredPokemons$ | async as pokemons; else loading">
+    <li
+      class="pokemon-card"
+      *ngFor="let pokemon of pokemons; trackBy: trackByName"
+      [routerLink]="['/pokemon', pokemon.name]"
+    >
+      <img
+        [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + getIdFromUrl(pokemon.url) + '.png'"
+        [alt]="pokemon.name"
+      />
+      <span class="pokemon-name">{{ pokemon.name }}</span>
+      <span class="pokemon-id">N°{{ formatId(getIdFromUrl(pokemon.url)) }}</span>
+    </li>
+
+    <li *ngIf="pokemons.length === 0" class="no-results">
+      Aucun Pokémon trouvé.
+    </li>
+  </ul>
+
+  <ng-template #loading>
+    <p class="loading">Chargement en cours...</p>
+  </ng-template>
+</div>
