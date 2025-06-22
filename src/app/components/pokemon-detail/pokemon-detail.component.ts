@@ -14,9 +14,9 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 })
 
 export class PokemonDetailComponent implements OnInit {
-  public pokemonService = inject(PokemonService);
 
-  constructor(private route: ActivatedRoute) { }
+  public pokemonService = inject(PokemonService);
+  private route = inject(ActivatedRoute); 
 
   pokemonDetails$!: Observable<PokemonDetails>;
 

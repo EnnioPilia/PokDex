@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { PokemonService } from '../../services/pokemon.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -17,8 +17,6 @@ export class PokemonListComponent {
 
   availableTypes = ['Fire', 'Water', 'Grass', 'Electric', 'Normal', 'Bug', 'Psychic', 'Fighting', 'Poison', 'Ground', 'Rock', 'Ghost'];
 
-  @Input() pokemon!: { name: string; url: string };
-
   private selectedType$ = new BehaviorSubject<string>('');
   private searchTerm$ = new BehaviorSubject<string>('');
   private sortDirection$ = new BehaviorSubject<'asc' | 'desc'>('asc');
@@ -28,11 +26,8 @@ export class PokemonListComponent {
     switchMap(type => this.pokemonService.getPokemonsByType(type))
   );
 
-  filteredPokemons$ = combineLatest([
-    this.pokemons$,
-    this.searchTerm$,
-    this.sortDirection$
-  ]).pipe(
+  filteredPokemons$ = combineLatest([this.pokemons$,this.searchTerm$,this.sortDirection$])
+  .pipe(
     map(([pokemons, searchTerm, direction]) =>
       pokemons
         .filter(p =>
@@ -57,14 +52,9 @@ export class PokemonListComponent {
     this.selectedType$.next(select.value);
   }
 
-  private sortByName(
-    a: { name: string },
-    b: { name: string },
-    direction: 'asc' | 'desc'
-  ): number {
+  private sortByName(a: { name: string },b: { name: string },direction: 'asc' | 'desc'):number {
     return direction === 'asc'
-      ? a.name.localeCompare(b.name)
-      : b.name.localeCompare(a.name);
+      ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
   }
 
   public trackByName(index: number, pokemon: { name: string }): string {
